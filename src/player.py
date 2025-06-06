@@ -9,7 +9,7 @@ class Player:
         self.stand = False
         self.side = side
         self.active = False
-        self.ready = True
+        self.ready = False
         self.window = window
         self.score_label = Label(
             window.root,
@@ -39,9 +39,6 @@ class Player:
             self.bust = True
             self.score_label.configure(text="Bust")
 
-    def set_stand(self):
-        self.stand = True
-
     def ace_check(self):
         """Checks if the player's score is over 21, then iterates through their hand, revaluing any
         aces one at a time until their score is less than 21 or until no aces are found."""
@@ -59,6 +56,8 @@ class Player:
                 self.ace_check()
 
     def display_cards(self):
+        """Adds the card images to the screen, keeping the stack centered on that player's side of the screen.
+        Each successive card is offset by 50 pixels."""
         if self.side == "left":
             x = (
                 self.window.width // 2
@@ -74,3 +73,15 @@ class Player:
         for card in self.hand:
             self.window.canvas.create_image(x, 400, image=card.img)
             x += 50
+
+    def set_ready(self):
+        """Helper function for use in a button"""
+        self.ready = True
+
+    def make_active(self):
+        """Helper function for use in a button"""
+        self.active = True
+
+    def set_stand(self):
+        """Helper function for use in a button."""
+        self.stand = True
