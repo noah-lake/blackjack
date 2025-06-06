@@ -12,15 +12,18 @@ class Card:
         # Value and suit are saved seperately for ease of generation later.
         self.value = value
         self.suit = suit
+        # Image path generation
         self.img_path = f"./static/{suit.lower()}_{value.title()}.png"
         self.img = PhotoImage(file=self.img_path)
-        if self.value == "jack" or self.value == "queen" or self.value == "king":
+        # Attributes for functions to track if a card has been operated on.
+        self.counted = False
+        # How many points each card is worth.
+        if self.value == "Jack" or self.value == "Queen" or self.value == "King":
             self.points = 10
-        elif self.value == "ace":
-            self.points = 1
+        elif self.value == "Ace":
+            self.points = 11
         else:
             self.points = int(self.value)
-        self.counter = False
 
 
 class Deck:
@@ -35,4 +38,7 @@ class Deck:
 
     def deal(self, player):
         """Takes a player object as input and appends the topmost card of the deck to their hand."""
-        player.hand.append(self.deck.pop())
+        if not player.bust and not player.stand:
+            player.hand.append(self.deck.pop())
+            player.calculate_score()
+            player.display_cards()
