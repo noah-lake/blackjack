@@ -48,8 +48,12 @@ class Deck:
         # Unmark all of our drawn cards and dump them back into the deck, then shuffle.
         for card in player.hand:
             card.counted = False
+            if card.value == "Ace":
+                card.points = 11
         for card in player2.hand:
             card.counted = False
+            if card.value == "Ace":
+                card.points = 11
         self.deck.extend(player.hand)
         self.deck.extend(player2.hand)
         shuffle(self.deck)
