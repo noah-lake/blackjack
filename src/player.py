@@ -85,3 +85,12 @@ class Player:
     def set_stand(self):
         """Helper function for use in a button."""
         self.stand = True
+
+    def reset(self):
+        self.hand.clear()
+        self.score = 0
+        self.score_label.configure(text=f"{self.score}")
+        self.active = False
+        self.ready = False
+        self.stand = False
+        self.bust = False

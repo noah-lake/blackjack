@@ -1,4 +1,4 @@
-from tkinter import Tk, Canvas, PhotoImage, Button
+from tkinter import Tk, Canvas, PhotoImage, Button, HIDDEN
 
 
 class Window:
@@ -82,7 +82,7 @@ class Window:
             player_two_stand = Button(
                 self.root,
                 text="Stand",
-                command=player.set_stand,
+                command=player2.set_stand,
                 anchor="center",
                 font=("Arial", 12),
                 width=5,
@@ -92,3 +92,67 @@ class Window:
             # ... and add them to the screen.
             player_two_hit.place(x=self.width // 2 + self.width // 4 - 75, y=100)
             player_two_stand.place(x=self.width // 2 + self.width // 4 + 5, y=100)
+
+    def main_menu(self, deck, player, player2):
+        """Shows the title screen with player number select buttons."""
+        self.running = True
+        title = self.canvas.create_text(
+            self.width // 2,
+            200,
+            text="B L A C K J A C K",
+            anchor="center",
+            font="Calibri 50 bold",
+        )
+
+        player_select = self.canvas.create_text(
+            self.width // 2,
+            450,
+            text="Select number of players",
+            anchor="center",
+            font="Calibri 20 bold",
+        )
+
+        one_player = Button(
+            self.root,
+            text="Singleplayer",
+            command=lambda: [self.start_game(deck, player, player2), hide_menu()],
+            width=12,
+            bg="black",
+            fg="white",
+        )
+
+        versus = Button(
+            self.root,
+            text="Versus",
+            command=lambda: [
+                hide_menu(),
+                player2.make_active(),
+                self.start_game(deck, player, player2),
+            ],
+            width=12,
+            bg="black",
+            fg="white",
+        )
+
+        one_player.place(x=self.width // 2 - 225, y=500)
+        versus.place(x=self.width // 2 + 75, y=500)
+
+        def hide_menu():
+            """Hides the main menu items."""
+            self.canvas.itemconfigure(title, state=HIDDEN)
+            self.canvas.itemconfigure(player_select, state=HIDDEN)
+            one_player.destroy()
+            versus.destroy()
+
+    def reset(self, player, player2):
+        for widget in self.root.winfo_children():
+            if (
+                widget != self.canvas
+                and widget != player.score_label
+                and widget != player2.score_label
+            ):
+                widget.destroy()
+        player.score_label.place_forget()
+        player2.score_label.place_forget()
+        self.canvas.delete("all")
+        self.generate_background()

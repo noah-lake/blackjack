@@ -42,3 +42,12 @@ class Deck:
             player.hand.append(self.deck.pop())
             player.calculate_score()
             player.display_cards()
+
+    def reset(self, player, player2):
+        for card in player.hand:
+            card.counted = False
+        for card in player2.hand:
+            card.counted = False
+        self.deck.extend(player.hand)
+        self.deck.extend(player2.hand)
+        shuffle(self.deck)
