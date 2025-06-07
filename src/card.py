@@ -44,6 +44,8 @@ class Deck:
             player.display_cards()
 
     def reset(self, player, player2):
+        """Resets the deck."""
+        # Unmark all of our drawn cards and dump them back into the deck, then shuffle.
         for card in player.hand:
             card.counted = False
         for card in player2.hand:

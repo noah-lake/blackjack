@@ -95,7 +95,9 @@ class Window:
 
     def main_menu(self, deck, player, player2):
         """Shows the title screen with player number select buttons."""
+        # Start the logic loop
         self.running = True
+        # Create the title
         title = self.canvas.create_text(
             self.width // 2,
             200,
@@ -103,7 +105,7 @@ class Window:
             anchor="center",
             font="Calibri 50 bold",
         )
-
+        # Create the player select text and buttons
         player_select = self.canvas.create_text(
             self.width // 2,
             450,
@@ -115,6 +117,7 @@ class Window:
         one_player = Button(
             self.root,
             text="Singleplayer",
+            # Singleplayer mode calls the start_game and hides the menu elements. It's the "default"
             command=lambda: [self.start_game(deck, player, player2), hide_menu()],
             width=12,
             bg="black",
@@ -124,6 +127,8 @@ class Window:
         versus = Button(
             self.root,
             text="Versus",
+            # Versus mode marks player two as active, disabling the logic loop that would control them.
+            # It is otherwise identical to singleplayer.
             command=lambda: [
                 hide_menu(),
                 player2.make_active(),
@@ -133,10 +138,11 @@ class Window:
             bg="black",
             fg="white",
         )
-
+        # Display buttons
         one_player.place(x=self.width // 2 - 225, y=500)
         versus.place(x=self.width // 2 + 75, y=500)
 
+        # Helper function to hide or destroy menu elements when the game starts.
         def hide_menu():
             """Hides the main menu items."""
             self.canvas.itemconfigure(title, state=HIDDEN)
@@ -145,6 +151,8 @@ class Window:
             versus.destroy()
 
     def reset(self, player, player2):
+        """Clears the screen of widgets and images except for the base background."""
+        # Delete all of the children of root except canvas and the score labels.
         for widget in self.root.winfo_children():
             if (
                 widget != self.canvas
@@ -152,7 +160,10 @@ class Window:
                 and widget != player2.score_label
             ):
                 widget.destroy()
+        # Hide the score labels
         player.score_label.place_forget()
         player2.score_label.place_forget()
+        # Wipe the canvas
         self.canvas.delete("all")
+        # Rebuild the background images
         self.generate_background()
